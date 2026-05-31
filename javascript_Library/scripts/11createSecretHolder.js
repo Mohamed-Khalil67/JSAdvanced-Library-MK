@@ -1,14 +1,18 @@
+// Stores a value privately in a closure.
+// Exposes only two methods — getSecret to read it and setSecret to update it.
+// Nobody can access the value directly.
+
+// Trick here is closure
 function customCreateSecretHolder(parameter) {
   if (typeof parameter !== 'number' && typeof parameter !== 'string') {
     throw new TypeError('Argument must be a number or a string');
   }
-  let realSecrect = parameter;
   return {
     getSecret: function () {
-      return realSecrect;
+      return parameter;
     },
     setSecret: function (newSecret) {
-      return (realSecrect = newSecret);
+      return (parameter = newSecret);
     },
   };
 }

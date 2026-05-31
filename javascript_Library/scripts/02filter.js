@@ -1,3 +1,8 @@
+// Loops over every element and keeps only the ones where the callback returns true.
+//  Returns a new shorter array.
+
+// The trick here is that we take the condition of the callback to make our new array
+
 function customFilter(array = [], callback) {
   if (!Array.isArray(array)) {
     throw new TypeError('First argument must be an array');

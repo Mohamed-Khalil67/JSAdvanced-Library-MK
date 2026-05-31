@@ -1,3 +1,6 @@
+// Returns an object with four methods — increment, decrement, reset, value.
+// The count lives privately in a closure and can only be accessed through the methods.
+
 function customCreateCounter(parameter) {
   if (typeof parameter !== 'number') {
     throw new TypeError('Argument must be a number');

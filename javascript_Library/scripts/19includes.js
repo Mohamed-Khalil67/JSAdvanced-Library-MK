@@ -1,3 +1,7 @@
+// Checks if a value exists anywhere in the array. Returns true or false.
+// Uses strict equality so types must match.
+
+// Sam idea as find different outcome
 function customIncludes(array = [], value) {
   if (!Array.isArray(array)) {
     throw new TypeError('First argument must be an array');

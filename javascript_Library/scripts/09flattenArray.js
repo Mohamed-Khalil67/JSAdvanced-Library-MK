@@ -1,3 +1,7 @@
+// Takes a deeply nested array and returns one flat array with all values.
+// Uses recursion to handle any depth of nesting.
+
+// Trick here is using the spreading method while in recursive like in deepClone Function
 function customFlattenArray(nestedArray) {
   // transform nest Arrays in non nested array
   if (!Array.isArray(nestedArray)) {

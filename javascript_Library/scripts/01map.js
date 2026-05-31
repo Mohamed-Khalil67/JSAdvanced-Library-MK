@@ -1,3 +1,10 @@
+// Loops over every element,
+// transforms it using a callback,
+// and collects all results into a new array.
+// Original array is never changed.
+
+// Trick Here is the callback arguments that needs to be known
+// Edge cases, what's the most optimized ? didn't see a difference if i used Array.isArray() or object prototype
 function customMap(array = [], callback) {
   if (!Array.isArray(array)) {
     throw new TypeError('First argument must be an array');

@@ -1,3 +1,7 @@
+// Searches the array and returns the first element where the callback returns true.
+// Stops immediately when found.
+
+// Sam trick as fitler, callback condition that where we find the element and break out of the function
 function customFind(array = [], callback) {
   if (!Array.isArray(array)) {
     throw new TypeError('First argument must be an array');

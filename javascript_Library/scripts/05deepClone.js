@@ -1,6 +1,12 @@
+// Creates a fully independent copy of any value — including deeply nested objects and arrays. Uses recursion to copy every level.
+// Changing the clone never affects the original.
+
+// The trick here is that i need to loop through the nested array or objects and need to know if there are arrays or objects or primitive values
+// which where the recursive method is needed to to loop over itself untill last primitive value is copied
+
 function customDeepClone(original) {
-  if (typeof original !== 'object' || original === null) return original; // edgae Cases , immediate return
-  // Array Case
+  // if primitive, return it directly, nothing to clone
+  if (typeof original !== 'object' || original === null) return original;
   if (Array.isArray(original)) {
     const resultArray = [];
     for (let i = 0; i < original.length; i++) {
@@ -8,10 +14,9 @@ function customDeepClone(original) {
     }
     return resultArray;
   } else {
-    // Object Case
     const resultObject = {};
     for (const key in original) {
-      resultObject[key] = customDeepClone(original[key]); //
+      resultObject[key] = customDeepClone(original[key]);
     }
     return resultObject;
   }

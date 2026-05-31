@@ -1,3 +1,9 @@
+// Loops over every element in an array and runs a callback on each one.
+// Returns nothing — only used for side effects like logging.
+
+// same as map , just the difference is when
+// looping the call back result is sent without keeping it in the function
+
 function customEach(array = [], callback) {
   if (!Array.isArray(array)) {
     throw new TypeError('First argument must be an array');

@@ -244,3 +244,127 @@ console.log(original.scores); // [1,2,3]  ← untouched ✓
 | Always write base case first | Stop condition before recursive call                  |
 | Input must shrink each call  | Primitive → smaller, object → its values              |
 | Return from every branch     | Array case returns, object case returns, base returns |
+
+## customDeepClone — Full Call Trace
+
+### Input
+
+```javascript
+customDeepClone({
+  name: 'Ahmed',
+  scores: [1, 2, 3],
+  address: { city: 'Cairo' },
+});
+```
+
+### Call 1 — top level object
+
+```javascript
+customDeepClone({ name:'Ahmed', scores:[1,2,3], address:{city:'Cairo'} })
+
+typeof {} === 'object' && not null → not primitive, continue
+Array.isArray({}) → false → object case
+resultObject = {}
+for...in starts
+```
+
+### Call 1 — key 'name' → spawns Call 2
+
+```javascript
+// loop is at key 'name', value is 'Ahmed'
+resultObject['name'] = customDeepClone('Ahmed')
+
+  Call 2: customDeepClone('Ahmed')
+    typeof 'Ahmed' !== 'object' → PRIMITIVE
+    return 'Ahmed' → lands back here ↓
+
+resultObject['name'] = 'Ahmed' // loop moves to next key
+```
+
+### Call 1 — key 'scores' → spawns Call 3
+
+```javascript
+// loop is at key 'scores', value is [1,2,3]
+resultObject['scores'] = customDeepClone([1,2,3])
+
+  Call 3: customDeepClone([1,2,3])
+    typeof [] === 'object' → not primitive
+    Array.isArray([]) → true → array case
+    resultArray = []
+
+    // i=0, value is 1
+    resultArray.push(customDeepClone(1))
+      Call 4: customDeepClone(1)
+        typeof 1 !== 'object' → PRIMITIVE
+        return 1 → lands back here ↓
+    resultArray.push(1) → resultArray = [1]
+
+    // i=1, value is 2
+    resultArray.push(customDeepClone(2))
+      Call 5: customDeepClone(2)
+        typeof 2 !== 'object' → PRIMITIVE
+        return 2 → lands back here ↓
+    resultArray.push(2) → resultArray = [1,2]
+
+    // i=2, value is 3
+    resultArray.push(customDeepClone(3))
+      Call 6: customDeepClone(3)
+        typeof 3 !== 'object' → PRIMITIVE
+        return 3 → lands back here ↓
+    resultArray.push(3) → resultArray = [1,2,3]
+
+    loop ends
+    return [1,2,3] → lands back here ↓
+
+resultObject['scores'] = [1,2,3] // loop moves to next key
+```
+
+### Call 1 — key 'address' → spawns Call 7
+
+```javascript
+// loop is at key 'address', value is { city:'Cairo' }
+resultObject['address'] = customDeepClone({ city:'Cairo' })
+
+  Call 7: customDeepClone({ city:'Cairo' })
+    typeof {} === 'object' → not primitive
+    Array.isArray({}) → false → object case
+    resultObject = {}
+
+    // key is 'city', value is 'Cairo'
+    resultObject['city'] = customDeepClone('Cairo')
+      Call 8: customDeepClone('Cairo')
+        typeof 'Cairo' !== 'object' → PRIMITIVE
+        return 'Cairo' → lands back here ↓
+    resultObject['city'] = 'Cairo'
+
+    loop ends
+    return { city:'Cairo' } → lands back here ↓
+
+resultObject['address'] = { city:'Cairo' } // loop ends, no more keys
+```
+
+### Call 1 — loop ends, return final result
+
+```javascript
+return {
+  name: 'Ahmed', // came from Call 2
+  scores: [1, 2, 3], // came from Call 3
+  address: { city: 'Cairo' }, // came from Call 7
+};
+```
+
+### How primitive return works — the exact mechanism
+
+```javascript
+// inside Call 1's loop:
+resultObject[key] = customDeepClone(original[key]);
+//                  ↑ JavaScript waits for this to return
+//                  ↑ whatever returns gets assigned here
+
+// Call 2 runs and returns 'Ahmed'
+// → exits Call 2 only, Call 1's loop is still running
+// → 'Ahmed' lands in resultObject['name']
+// → loop moves to next key
+```
+
+### Call stack summary

@@ -1,10 +1,14 @@
+// Chains multiple async functions left to right.
+// Each function waits for the previous one to finish before running.
+// Returns a promise with the final result.
+
+// Trick here is using await , for async functioning
 function customPipeAsync(...fns) {
   for (let i = 0; i < fns.length; i++) {
     if (typeof fns[i] !== 'function') {
       throw new TypeError('All arguments must be functions');
     }
   }
-
   return async function (x) {
     let result = x;
     for (let i = 0; i < fns.length; i++) {

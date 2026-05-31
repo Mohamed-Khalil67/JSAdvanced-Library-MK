@@ -1,3 +1,10 @@
+// Wraps a function and caches its results.
+// Same arguments always return the cached result instead of recalculating.
+// Uses a closure to store the cache between calls.
+
+// When a closure is created, the inner function gets a backpack containing
+// references to all the outer variables it uses
+// and those variables stay alive in memory as long as the inner function exists.
 function customMemoize(fn) {
   if (typeof fn !== 'function') {
     throw new TypeError('Argument must be a function');

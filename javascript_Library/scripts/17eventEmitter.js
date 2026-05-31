@@ -1,3 +1,8 @@
+// An event system with four methods — on registers a listener,
+// emit fires all listeners for an event,
+// off removes them,
+// once fires only one time then removes itself automatically.
+
 function customEmitter() {
   const listeners = {};
   return {
@@ -8,8 +13,7 @@ function customEmitter() {
       listeners[event].push(callback);
     },
     emit: function (event, data) {
-      if (!listeners[event]) return; // guard at start
-
+      if (!listeners[event]) return; // guard at start, silent throwing
       // off() shouldn't affect the loop
       const callbacks = listeners[event].slice(); // copying array
       for (let i = 0; i < callbacks.length; i++) {
@@ -52,3 +56,5 @@ emitter.once('signup', (user) => console.log('first signup:', user));
 emitter.emit('signup', 'Ahmed'); // first signup: Ahmed
 emitter.emit('signup', 'Sara'); // nothing ← removed after first emit
 emitter.emit('signup', 'Omar'); // nothing ← still gone
+
+emitter.emit('login', 'omar');
