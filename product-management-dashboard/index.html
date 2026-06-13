@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Management Dashboard</title>
+
+  <!-- Bootstrap 5 (local — vendored, see npm run copy:vendor) -->
+  <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css" />
+  <!-- Bootstrap Icons (local — vendored) -->
+  <link rel="stylesheet" href="vendor/bootstrap-icons/font/bootstrap-icons.min.css" />
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Apply saved theme before paint to avoid a flash of the wrong mode -->
+  <script>
+    (function () {
+      const savedTheme = localStorage.getItem("productDashboard_theme");
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const theme = savedTheme || (prefersDark ? "dark" : "light");
+      document.documentElement.setAttribute("data-bs-theme", theme);
+    })();
+  </script>
+</head>
+<body>
+  <div class="container py-4">
+
+    <!-- ============ Header ============ -->
+    <header class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+      <div>
+        <h1 class="h2 fw-bold mb-1">Product Management Dashboard</h1>
+        <p class="text-secondary mb-0">
+          A vanilla JavaScript demo for learning DOM manipulation and array methods
+        </p>
+      </div>
+      <button
+        type="button"
+        id="themeToggle"
+        class="btn btn-outline-secondary"
+        aria-label="Toggle dark mode"
+      >
+        <span class="theme-icon theme-icon-light" aria-hidden="true">🌙</span>
+        <span class="theme-icon theme-icon-dark d-none" aria-hidden="true">☀️</span>
+      </button>
+    </header>
+
+    <!-- ============ Statistics Section ============ -->
+    <section class="row g-3 mb-4" aria-label="Product statistics">
+      <div class="col-md-4">
+        <div class="card stat-card h-100">
+          <div class="card-body">
+            <div class="text-secondary small text-uppercase mb-1">Total Products</div>
+            <div class="fs-3 fw-bold" id="totalProducts">0</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card stat-card h-100">
+          <div class="card-body">
+            <div class="text-secondary small text-uppercase mb-1">Total Inventory Value</div>
+            <div class="fs-3 fw-bold" id="totalInventoryValue">$0.00</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card stat-card h-100">
+          <div class="card-body">
+            <div class="text-secondary small text-uppercase mb-1">Most Expensive Product</div>
+            <div class="fs-3 fw-bold" id="mostExpensiveProduct">—</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Add / Edit Product Form ============ -->
+    <section class="card mb-4">
+      <div class="card-body">
+        <h2 class="h4 mb-3" id="formTitle">Add Product</h2>
+        <form id="productForm" novalidate>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="title" class="form-label">
+                Title <span class="text-danger">*</span>
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                class="form-control"
+                placeholder="e.g. Wireless Mouse"
+              />
+              <div class="invalid-feedback d-block" id="titleError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="price" class="form-label">
+                Price <span class="text-danger">*</span>
+              </label>
+              <input
+                type="number"
+                id="price"
+                name="price"
+                class="form-control"
+                step="0.01"
+                min="0"
+                placeholder="0.00"
+              />
+              <div class="invalid-feedback d-block" id="priceError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="category" class="form-label">
+                Category <span class="text-danger">*</span>
+              </label>
+              <select id="category" name="category" class="form-select">
+                <option value="">Select a category</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Clothes">Clothes</option>
+                <option value="Books">Books</option>
+                <option value="Food">Food</option>
+              </select>
+              <div class="invalid-feedback d-block" id="categoryError"></div>
+            </div>
+
+            <div class="col-md-6">
+              <label for="stock" class="form-label">
+                Stock <span class="text-danger">*</span>
+              </label>
+              <input
+                type="number"
+                id="stock"
+                name="stock"
+                class="form-control"
+                min="0"
+                placeholder="0"
+              />
+              <div class="invalid-feedback d-block" id="stockError"></div>
+            </div>
+          </div>
+
+          <div class="d-flex gap-2 mt-3">
+            <button type="submit" id="submitBtn" class="btn btn-primary">Add Product</button>
+            <button type="button" id="cancelBtn" class="btn btn-secondary d-none">
+              Cancel Edit
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- ============ Search, Filter, Sort Controls ============ -->
+    <section class="card mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label for="searchInput" class="form-label">Search by Title</label>
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control"
+              placeholder="Search products..."
+            />
+          </div>
+          <div class="col-md-4">
+            <label for="categoryFilter" class="form-label">Filter by Category</label>
+            <select id="categoryFilter" class="form-select">
+              <option value="All">All</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Clothes">Clothes</option>
+              <option value="Books">Books</option>
+              <option value="Food">Food</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="sortSelect" class="form-label">Sort By</label>
+            <select id="sortSelect" class="form-select">
+              <option value="default">Default</option>
+              <option value="price-asc">Price Ascending</option>
+              <option value="price-desc">Price Descending</option>
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Products Table ============ -->
+    <section class="card mb-4">
+      <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <h2 class="h4 mb-0">Products</h2>
+          <button type="button" id="exportBtn" class="btn btn-outline-primary btn-sm">
+            Export products.json
+          </button>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-hover align-middle" id="productsTable">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Price</th>
+                <th>Category</th>
+                <th>Stock</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <!-- Products rendered by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+        <p id="emptyState" class="text-center text-secondary fs-5 my-4 d-none">
+          No Products Found
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ Undo Delete Toast ============ -->
+    <div
+      class="toast-container position-fixed bottom-0 end-0 p-3"
+      style="z-index: 1080;"
+    >
+      <div
+        id="undoToast"
+        class="toast align-items-center text-bg-dark border-0"
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        data-bs-autohide="true"
+        data-bs-delay="5000"
+      >
+        <div class="d-flex">
+          <div class="toast-body">
+            Product deleted.
+            <button
+              type="button"
+              id="undoBtn"
+              class="btn btn-sm btn-link text-info text-decoration-none p-0 ms-2"
+            >
+              Undo
+            </button>
+          </div>
+          <button
+            type="button"
+            class="btn-close btn-close-white me-2 m-auto"
+            data-bs-dismiss="toast"
+            aria-label="Close"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS bundle (local — vendored) -->
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Utility package reused from Task 1 + extra helpers -->
+  <script src="js/utils.js"></script>
+  <!-- Main app (your exercises live here) -->
+  <script src="js/script.js"></script>
+</body>
+</html>

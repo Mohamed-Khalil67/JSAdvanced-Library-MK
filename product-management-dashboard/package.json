@@ -1,0 +1,21 @@
+{
+  "name": "product-management-dashboard",
+  "version": "1.0.0",
+  "description": "Product Management Dashboard — Task 2 (Advanced JS course). Vanilla HTML/CSS/JS, Bootstrap, reuses the Task 1 utility package.",
+  "scripts": {
+    "start": "npx --yes http-server -c-1 -p 5173 -o",
+    "copy:vendor": "shx mkdir -p vendor/bootstrap/css vendor/bootstrap/js vendor/bootstrap-icons/font/fonts && shx cp node_modules/bootstrap/dist/css/bootstrap.min.css vendor/bootstrap/css/ && shx cp node_modules/bootstrap/dist/js/bootstrap.bundle.min.js vendor/bootstrap/js/ && shx cp node_modules/bootstrap-icons/font/bootstrap-icons.min.css vendor/bootstrap-icons/font/ && shx cp -r node_modules/bootstrap-icons/font/fonts/* vendor/bootstrap-icons/font/fonts/"
+  },
+  "keywords": [
+    "vanilla-js",
+    "bootstrap",
+    "dashboard"
+  ],
+  "author": "Mohamed Khalil",
+  "license": "ISC",
+  "devDependencies": {
+    "bootstrap": "^5.3.3",
+    "bootstrap-icons": "^1.11.3",
+    "shx": "^0.4.0"
+  }
+}
