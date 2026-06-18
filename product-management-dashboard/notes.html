@@ -1,0 +1,2071 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Dashboard — Study Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;500;600;700&display=swap');
+
+        :root {
+            --bg: #0f1117;
+            --surface: #181c27;
+            --surface2: #1e2334;
+            --border: #2a3045;
+            --accent: #5b7cfa;
+            --accent2: #a78bfa;
+            --green: #34d399;
+            --yellow: #fbbf24;
+            --red: #f87171;
+            --text: #e2e8f0;
+            --muted: #8892a4;
+            --code-bg: #0a0e1a;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 15px;
+            line-height: 1.65;
+            padding: 0 0 80px;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, #0f1117 0%, #1a1f35 50%, #0f1117 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 48px 24px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 60% 40% at 50% 0%, rgba(91, 124, 250, .18) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(91, 124, 250, .15);
+            border: 1px solid rgba(91, 124, 250, .4);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: .12em;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: clamp(22px, 4vw, 36px);
+            font-weight: 700;
+            letter-spacing: -.02em;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #e2e8f0, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 14px;
+            max-width: 520px;
+            margin: 0 auto 28px;
+        }
+
+        /* ── PROGRESS BAR ── */
+        .progress-bar-wrap {
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--border);
+            border-radius: 4px;
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            border-radius: 4px;
+            transition: width .4s ease;
+        }
+
+        .progress-label {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 8px;
+        }
+
+        /* ── LAYOUT ── */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ── NAV PILLS ── */
+        .nav-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 24px 20px 0;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nav-pill {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap;
+        }
+
+        .nav-pill:hover,
+        .nav-pill.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* ── EXERCISE CARD ── */
+        .exercise-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            margin-top: 24px;
+            overflow: hidden;
+            transition: border-color .2s;
+        }
+
+        .exercise-card:hover {
+            border-color: rgba(91, 124, 250, .4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 20px 24px 0;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            flex: 1;
+        }
+
+        .ex-num {
+            background: rgba(91, 124, 250, .15);
+            border: 1px solid rgba(91, 124, 250, .35);
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 9px;
+            border-radius: 6px;
+            white-space: nowrap;
+            margin-top: 2px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .card-subtitle {
+            font-size: 13px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .chevron {
+            color: var(--muted);
+            font-size: 18px;
+            transition: transform .25s;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .exercise-card.open .chevron {
+            transform: rotate(180deg);
+        }
+
+        .card-body {
+            display: none;
+            padding: 0 24px 24px;
+            margin-top: 16px;
+        }
+
+        .exercise-card.open .card-body {
+            display: block;
+        }
+
+        /* ── SECTIONS INSIDE CARD ── */
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 20px 0 10px;
+        }
+
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        /* ── WHAT IT DOES ── */
+        .what-box {
+            background: var(--surface2);
+            border-left: 3px solid var(--green);
+            border-radius: 0 8px 8px 0;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text);
+        }
+
+        /* ── CODE BLOCK ── */
+        pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #c9d1d9;
+        }
+
+        .kw {
+            color: #ff7b72;
+        }
+
+        .fn {
+            color: #d2a8ff;
+        }
+
+        .str {
+            color: #a5d6ff;
+        }
+
+        .cm {
+            color: #6e7b8b;
+            font-style: italic;
+        }
+
+        .num {
+            color: #79c0ff;
+        }
+
+        .var {
+            color: #ffa657;
+        }
+
+        .op {
+            color: #ff7b72;
+        }
+
+        /* ── UTILS CHIPS ── */
+        .utils-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .util-chip {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all .2s;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .util-chip:hover {
+            border-color: var(--accent);
+            background: rgba(91, 124, 250, .08);
+        }
+
+        .util-chip .chip-name {
+            color: var(--accent2);
+            font-weight: 600;
+        }
+
+        .util-chip .chip-desc {
+            color: var(--muted);
+            font-size: 11px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ── CONCEPTS ── */
+        .concept-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .concept-tag {
+            background: rgba(167, 139, 250, .12);
+            border: 1px solid rgba(167, 139, 250, .3);
+            color: var(--accent2);
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        /* ── Q&A ── */
+        .qa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .qa-item {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .qa-question {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--yellow);
+            gap: 12px;
+            user-select: none;
+        }
+
+        .qa-question span {
+            flex: 1;
+        }
+
+        .qa-toggle {
+            font-size: 16px;
+            transition: transform .2s;
+            flex-shrink: 0;
+        }
+
+        .qa-item.open .qa-toggle {
+            transform: rotate(180deg);
+        }
+
+        .qa-answer {
+            display: none;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--text);
+            border-top: 1px solid var(--border);
+            line-height: 1.7;
+        }
+
+        .qa-item.open .qa-answer {
+            display: block;
+        }
+
+        /* ── UTIL MODAL ── */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            z-index: 999;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.open {
+            display: flex;
+        }
+
+        .modal-box {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 28px;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            color: var(--text);
+            border-color: var(--accent);
+        }
+
+        .modal-fn-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent2);
+            margin-bottom: 8px;
+        }
+
+        .modal-purpose {
+            font-size: 14px;
+            color: var(--muted);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        /* ── SUMMARY TABLE ── */
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .summary-table th {
+            text-align: left;
+            padding: 8px 12px;
+            background: var(--surface2);
+            color: var(--muted);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .summary-table tr:hover td {
+            background: var(--surface2);
+        }
+
+        .td-fn {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent2);
+            font-size: 12px;
+        }
+
+        .td-ex {
+            color: var(--accent);
+            font-size: 12px;
+        }
+
+        hr.divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 32px 0;
+        }
+
+        .done-indicator {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            flex-shrink: 0;
+            margin-top: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all .2s;
+        }
+
+        .done-indicator.done {
+            background: var(--green);
+            border-color: var(--green);
+            color: #000;
+        }
+
+        .tip-box {
+            background: rgba(251, 191, 36, .07);
+            border: 1px solid rgba(251, 191, 36, .25);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 13px;
+            color: var(--text);
+            margin-top: 12px;
+        }
+
+        .tip-box strong {
+            color: var(--yellow);
+        }
+
+        @media (max-width: 600px) {
+            .card-header {
+                padding: 16px 16px 0;
+            }
+
+            .card-body {
+                padding: 0 16px 16px;
+            }
+
+            pre {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── UTIL MODAL ── -->
+    <div class="modal-overlay" id="utilModal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()">✕</button>
+            <div class="modal-fn-name" id="modalFnName"></div>
+            <div class="modal-purpose" id="modalPurpose"></div>
+            <pre id="modalCode"></pre>
+        </div>
+    </div>
+
+    <!-- ── HERO ── -->
+    <div class="hero">
+        <div class="hero-badge">Study Guide</div>
+        <h1>Product Management Dashboard</h1>
+        <p>Click each exercise to expand it. Mark exercises as done to track your progress. Click any Utils chip to see
+            the full function code.</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progressLabel">0 / 12 exercises reviewed</div>
+    </div>
+
+    <!-- ── NAV PILLS ── -->
+    <div class="nav-pills">
+        <div class="nav-pill active" onclick="filterCards('all', this)">All (12)</div>
+        <div class="nav-pill" onclick="filterCards('core', this)">Core Logic</div>
+        <div class="nav-pill" onclick="filterCards('bonus', this)">Bonus</div>
+    </div>
+
+    <!-- ── CARDS ── -->
+    <div class="container" id="cardsContainer">
+
+        <!-- ====== EX 1 ====== -->
+        <div class="exercise-card" data-ex="1" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-1" onclick="event.stopPropagation(); markDone(1)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 01</span>
+                            <span class="card-title">Load products from localStorage</span>
+                        </div>
+                        <div class="card-subtitle">Reading persisted data on page load</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">When the page first loads, reads any previously saved products from the browser's
+                    <code>localStorage</code>. If nothing is stored yet (first visit), it defaults to an empty array so
+                    the app doesn't crash.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">loadProducts</span>() {
+  products = Utils.<span class="fn">loadFromStorage</span>(STORAGE_KEY, []);
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('loadFromStorage')">
+                        <span class="chip-name">Utils.loadFromStorage(key, fallback)</span>
+                        <span class="chip-desc">Reads & JSON.parses a value from localStorage. Returns fallback if key
+                            doesn't exist.</span>
+                    </div>
+                </div>
+
+                <div class="tip-box"><strong>💡 How loadFromStorage works internally:</strong> It calls
+                    <code>localStorage.getItem(key)</code>. If the result is <code>null</code> (key doesn't exist), it
+                    returns the fallback. Otherwise it calls <code>JSON.parse()</code> on the raw string — because
+                    localStorage only stores strings, not real arrays/objects.</div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">Default parameter (fallback = [])</span>
+                    <span class="concept-tag">localStorage</span>
+                    <span class="concept-tag">JSON.parse</span>
+                    <span class="concept-tag">Utility reuse</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What happens on a brand new first
+                                visit?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">localStorage has nothing stored under STORAGE_KEY, so
+                            <code>getItem()</code> returns <code>null</code>. The function detects this and returns the
+                            fallback value <code>[]</code>, so <code>products</code> starts as an empty array.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why do we need JSON.parse
+                                here?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">localStorage can only store strings. When we saved the array earlier, it
+                            was converted to a JSON string via <code>JSON.stringify</code>. So when loading it back, we
+                            must parse it back into a real JavaScript array with <code>JSON.parse</code>.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 2 ====== -->
+        <div class="exercise-card" data-ex="2" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-2" onclick="event.stopPropagation(); markDone(2)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 02</span>
+                            <span class="card-title">Persist products to localStorage</span>
+                        </div>
+                        <div class="card-subtitle">Saving data so page refresh doesn't lose it</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Every time the products array changes (add, edit, or delete), this function saves
+                    the entire array to localStorage. Without it, all data disappears on page refresh.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">persistProducts</span>() {
+  Utils.<span class="fn">saveToStorage</span>(STORAGE_KEY, products);
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('saveToStorage')">
+                        <span class="chip-name">Utils.saveToStorage(key, value)</span>
+                        <span class="chip-desc">JSON.stringifies a value and stores it in localStorage under the given
+                            key.</span>
+                    </div>
+                </div>
+
+                <div class="tip-box"><strong>💡 How saveToStorage works internally:</strong> It calls
+                    <code>JSON.stringify(value)</code> to convert the array to a string, then calls
+                    <code>localStorage.setItem(key, stringified)</code>. It's wrapped in a try/catch so it gracefully
+                    handles cases like private browsing where storage might be disabled.</div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">localStorage persistence</span>
+                    <span class="concept-tag">JSON.stringify</span>
+                    <span class="concept-tag">Modular functions (called after every mutation)</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why is this called after every
+                                add/edit/delete?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>products</code> is just a variable living in memory (RAM). The
+                            moment the page is closed or refreshed, memory is cleared. localStorage is the only way to
+                            keep data across sessions, so we sync it after every change.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why does saveToStorage need
+                                JSON.stringify?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">localStorage only accepts strings. If you try to store an array directly,
+                            JavaScript converts it to something like "object Object" which is useless. JSON.stringify
+                            properly converts it to <code>'[{"id":"abc","title":"Laptop",...}]'</code>.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 3 ====== -->
+        <div class="exercise-card" data-ex="3" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-3" onclick="event.stopPropagation(); markDone(3)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 03</span>
+                            <span class="card-title">Build the filtered + sorted list</span>
+                        </div>
+                        <div class="card-subtitle">filter() · spread · sort() · normalizeText · sortBy</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Returns a brand-new array (never touching the original <code>products</code>) that
+                    applies: search filter, category filter, and sort order — based on what the user has selected in the
+                    UI controls.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">getVisibleProducts</span>() {
+  <span class="kw">const</span> search   = Utils.<span class="fn">normalizeText</span>(els.searchInput.value);
+  <span class="kw">const</span> category = els.categoryFilter.value;
+  <span class="kw">const</span> sortBy   = els.sortSelect.value;
+
+  <span class="cm">// filter() — only keep products that match both conditions</span>
+  <span class="kw">let</span> result = Utils.<span class="fn">customFilter</span>(products, (p) => {
+    <span class="kw">const</span> matchesSearch   = Utils.<span class="fn">normalizeText</span>(p.title).includes(search);
+    <span class="kw">const</span> matchesCategory = category === <span class="str">'All'</span> || p.category === category;
+    <span class="kw">return</span> matchesSearch && matchesCategory;
+  });
+
+  <span class="cm">// sort the filtered copy (sortBy clones with spread internally)</span>
+  <span class="kw">switch</span> (sortBy) {
+    <span class="kw">case</span> <span class="str">'price-asc'</span>:  result = Utils.<span class="fn">sortBy</span>(result, <span class="str">'price'</span>, <span class="str">'asc'</span>);  <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'price-desc'</span>: result = Utils.<span class="fn">sortBy</span>(result, <span class="str">'price'</span>, <span class="str">'desc'</span>); <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'newest'</span>:     result = Utils.<span class="fn">sortBy</span>(result, <span class="str">'createdAt'</span>, <span class="str">'desc'</span>); <span class="kw">break</span>;
+    <span class="kw">case</span> <span class="str">'oldest'</span>:     result = Utils.<span class="fn">sortBy</span>(result, <span class="str">'createdAt'</span>, <span class="str">'asc'</span>); <span class="kw">break</span>;
+  }
+  <span class="kw">return</span> result;
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('normalizeText')">
+                        <span class="chip-name">Utils.normalizeText(str)</span>
+                        <span class="chip-desc">Trims and lowercases a string so "MOUSE" matches "mouse".</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('customFilter')">
+                        <span class="chip-name">Utils.customFilter(array, callback)</span>
+                        <span class="chip-desc">Custom implementation of Array.filter(). Returns new array of items
+                            where callback returns true.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('sortBy')">
+                        <span class="chip-name">Utils.sortBy(array, key, direction)</span>
+                        <span class="chip-desc">Returns a NEW sorted array by a given key ('asc' or 'desc'). Uses spread
+                            to clone first.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">filter()</span>
+                    <span class="concept-tag">sort()</span>
+                    <span class="concept-tag">Spread operator (clone before sort)</span>
+                    <span class="concept-tag">Never mutate original array</span>
+                    <span class="concept-tag">Case-insensitive search</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why not sort the products array
+                                directly?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">Because sort() mutates the array in place. If you sorted
+                            <code>products</code> directly, the order would change permanently. Next time the user
+                            clears the filter, the original insertion order would be gone. By spreading into a new array
+                            first (<code>[...array]</code> inside sortBy), the original order is always preserved.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why use normalizeText before
+                                comparing?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">Without it, searching "laptop" would NOT match a product titled "Laptop"
+                            because JavaScript string comparison is case-sensitive. <code>normalizeText</code>
+                            lowercases and trims both the search input and the product title before comparing, so the
+                            match works regardless of case.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>How does customFilter know which
+                                products to keep?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">It runs the callback function on each product. If the callback returns
+                            <code>true</code>, the product is kept. Both conditions (<code>matchesSearch</code> AND
+                            <code>matchesCategory</code>) must be true. If the search box is empty, normalizeText
+                            returns "" and every title includes "", so all products pass that check.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 4 ====== -->
+        <div class="exercise-card" data-ex="4" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-4" onclick="event.stopPropagation(); markDone(4)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 04</span>
+                            <span class="card-title">Render the products table</span>
+                        </div>
+                        <div class="card-subtitle">forEach · destructuring · template literals · formatCurrency ·
+                            formatDate</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Clears the table, then rebuilds it row by row from the visible products. If the
+                    list is empty, it shows an "No Products Found" message instead.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">renderProducts</span>() {
+  <span class="kw">const</span> visible = <span class="fn">getVisibleProducts</span>();
+  els.tableBody.innerHTML = <span class="str">''</span>;
+  els.emptyState.classList.<span class="fn">toggle</span>(<span class="str">'d-none'</span>, visible.length > <span class="num">0</span>);
+
+  Utils.<span class="fn">customEach</span>(visible, (product) => {
+    <span class="cm">// Destructuring — extract fields cleanly instead of product.title etc.</span>
+    <span class="kw">const</span> { id, title, price, category, stock, createdAt } = product;
+
+    <span class="cm">// Template literal — build the HTML row as a string</span>
+    <span class="kw">const</span> row = <span class="str">`
+      &lt;tr&gt;
+        &lt;td&gt;${title}&lt;/td&gt;
+        &lt;td&gt;${Utils.formatCurrency(price)}&lt;/td&gt;
+        &lt;td&gt;${category}&lt;/td&gt;
+        &lt;td&gt;${stock}&lt;/td&gt;
+        &lt;td&gt;${Utils.formatDate(createdAt)}&lt;/td&gt;
+        &lt;td&gt;
+          &lt;button data-action="edit"   data-id="${id}"&gt;Edit&lt;/button&gt;
+          &lt;button data-action="delete" data-id="${id}"&gt;Delete&lt;/button&gt;
+        &lt;/td&gt;
+      &lt;/tr&gt;
+    `</span>;
+    els.tableBody.<span class="fn">insertAdjacentHTML</span>(<span class="str">'beforeend'</span>, row);
+  });
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('customEach')">
+                        <span class="chip-name">Utils.customEach(array, callback)</span>
+                        <span class="chip-desc">Custom forEach. Runs the callback for every item. Does not return
+                            anything.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('formatCurrency')">
+                        <span class="chip-name">Utils.formatCurrency(value)</span>
+                        <span class="chip-desc">Formats a number as "$12.99" using Intl.NumberFormat. Returns "—" for
+                            invalid values.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('formatDate')">
+                        <span class="chip-name">Utils.formatDate(input)</span>
+                        <span class="chip-desc">Converts an ISO date string to "DD/MM/YYYY" format for display.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">Object destructuring</span>
+                    <span class="concept-tag">Template literals (backticks + ${})</span>
+                    <span class="concept-tag">forEach / customEach</span>
+                    <span class="concept-tag">insertAdjacentHTML</span>
+                    <span class="concept-tag">Event delegation (data-action, data-id)</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What does destructuring save you from
+                                writing?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">Without destructuring you'd write <code>product.title</code>,
+                            <code>product.price</code>, <code>product.category</code> every time. With
+                            <code>const { id, title, price, ... } = product</code>, you unpack those fields once into
+                            local variables and use them directly. Cleaner and less repetitive.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why use data-action and data-id on the
+                                buttons?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">This is called event delegation. Instead of attaching a separate click
+                            listener to every single button (which would need to be re-attached every time the table
+                            re-renders), one listener on the table body reads <code>btn.dataset.action</code> and
+                            <code>btn.dataset.id</code> to know which product to edit or delete. It's more efficient and
+                            works for dynamically added rows.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 5 ====== -->
+        <div class="exercise-card" data-ex="5" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-5" onclick="event.stopPropagation(); markDone(5)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 05</span>
+                            <span class="card-title">Update the statistics section</span>
+                        </div>
+                        <div class="card-subtitle">reduce() · find() · formatCurrency</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Computes three dashboard stats: total count of products, total inventory value
+                    (every product's price × stock, all summed), and the title of the most expensive product.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">updateStats</span>() {
+  els.totalProducts.textContent = products.length;
+
+  <span class="cm">// reduce() — accumulate a single number from the whole array</span>
+  <span class="kw">const</span> inventoryValue = Utils.<span class="fn">customReduce</span>(
+    products,
+    (sum, p) => sum + p.price * p.stock,
+    <span class="num">0</span>   <span class="cm">// initial value</span>
+  );
+  els.totalInventoryValue.textContent = Utils.<span class="fn">formatCurrency</span>(inventoryValue);
+
+  <span class="kw">if</span> (products.length === <span class="num">0</span>) {
+    els.mostExpensiveProduct.textContent = <span class="str">'—'</span>;
+    <span class="kw">return</span>;
+  }
+
+  <span class="cm">// reduce() again — find the highest price value</span>
+  <span class="kw">const</span> maxPrice = Utils.<span class="fn">customReduce</span>(
+    products,
+    (max, p) => (p.price > max ? p.price : max),
+    -Infinity
+  );
+
+  <span class="cm">// find() — get the product object whose price equals maxPrice</span>
+  <span class="kw">const</span> expensive = Utils.<span class="fn">customFind</span>(products, (p) => p.price === maxPrice);
+  els.mostExpensiveProduct.textContent = expensive ? expensive.title : <span class="str">'—'</span>;
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('customReduce')">
+                        <span class="chip-name">Utils.customReduce(array, callback, initial)</span>
+                        <span class="chip-desc">Custom reduce(). Accumulates a single value across all array items using
+                            the callback.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('customFind')">
+                        <span class="chip-name">Utils.customFind(array, callback)</span>
+                        <span class="chip-desc">Custom find(). Returns the first item where callback returns true.
+                            Returns undefined if none found.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('formatCurrency')">
+                        <span class="chip-name">Utils.formatCurrency(value)</span>
+                        <span class="chip-desc">Formats a number as currency like "$1,234.56".</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">reduce() — sum & max</span>
+                    <span class="concept-tag">find() — get matching object</span>
+                    <span class="concept-tag">-Infinity as initial max value</span>
+                    <span class="concept-tag">Guard clause (empty array)</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Explain reduce() in plain
+                                terms.</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">reduce() works like a running total. You give it a starting value (here
+                            <code>0</code>) and a function that says "given what I have so far, and the current item,
+                            what's the new total?". For the inventory: start at 0, then for each product add
+                            <code>price × stock</code>. After the last product, you have the total value. It reduces an
+                            entire array down to one single value.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why use -Infinity as the initial value
+                                for the max price?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">If we started at 0, a product with price $0 would never "win" as the
+                            maximum. By starting at -Infinity, even a $0 product is guaranteed to be larger, so it
+                            correctly becomes the current max in the first iteration.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 6 ====== -->
+        <div class="exercise-card" data-ex="6" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-6" onclick="event.stopPropagation(); markDone(6)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 06</span>
+                            <span class="card-title">Validate the form</span>
+                        </div>
+                        <div class="card-subtitle">some() · every() · isRequired · isPositiveNumber ·
+                            isNonNegativeInteger</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Checks all four form fields and returns an errors object. Each key in the object
+                    is a field name and its value is an error message string. An empty object means everything is valid.
+                    The form submit handler reads this to decide whether to proceed.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">validateForm</span>({ title, price, category, stock }) {
+  <span class="kw">const</span> errors = {};
+
+  <span class="kw">if</span> (!Utils.<span class="fn">isRequired</span>(title))
+    errors.title = <span class="str">'Title is required.'</span>;
+  <span class="kw">if</span> (!Utils.<span class="fn">isPositiveNumber</span>(price))
+    errors.price = <span class="str">'Price must be a positive number.'</span>;
+  <span class="kw">if</span> (!Utils.<span class="fn">customSome</span>(CATEGORIES, (c) => c === category))
+    errors.category = <span class="str">'Please choose a category.'</span>;
+  <span class="kw">if</span> (!Utils.<span class="fn">isNonNegativeInteger</span>(stock))
+    errors.stock = <span class="str">'Stock must be 0 or a positive whole number.'</span>;
+
+  <span class="kw">return</span> errors;
+}
+
+<span class="cm">// In the submit handler — uses customEvery to check all errors are absent:</span>
+<span class="kw">const</span> isValid = Utils.<span class="fn">customEvery</span>(Object.keys(errors), (k) => !errors[k]);</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('isRequired')">
+                        <span class="chip-name">Utils.isRequired(value)</span>
+                        <span class="chip-desc">Returns true if value is not null/undefined and not an empty/whitespace
+                            string.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('isPositiveNumber')">
+                        <span class="chip-name">Utils.isPositiveNumber(value)</span>
+                        <span class="chip-desc">Returns true if the value converts to a number that is greater than 0
+                            (not NaN).</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('isNonNegativeInteger')">
+                        <span class="chip-name">Utils.isNonNegativeInteger(value)</span>
+                        <span class="chip-desc">Returns true if the value is an integer ≥ 0. Rejects decimals and
+                            negatives.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('customSome')">
+                        <span class="chip-name">Utils.customSome(array, callback)</span>
+                        <span class="chip-desc">Custom some(). Returns true if at least one item passes the callback
+                            test.</span>
+                    </div>
+                    <div class="util-chip" onclick="showUtil('customEvery')">
+                        <span class="chip-name">Utils.customEvery(array, callback)</span>
+                        <span class="chip-desc">Custom every(). Returns true only if ALL items pass the callback test.
+                            Used to confirm no errors exist.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">some() — at least one passes</span>
+                    <span class="concept-tag">every() — all pass</span>
+                    <span class="concept-tag">Errors object pattern</span>
+                    <span class="concept-tag">Parameter destructuring</span>
+                    <span class="concept-tag">Validation utilities</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What's the difference between some() and
+                                every()?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>some()</code> returns <code>true</code> if AT LEAST ONE item passes
+                            the test — like an OR gate. <code>every()</code> returns <code>true</code> only if ALL items
+                            pass — like an AND gate. Here, <code>customSome</code> checks if the chosen category is one
+                            of the valid options. <code>customEvery</code> checks that no error keys have values.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why does validateForm take a
+                                destructured parameter?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">The function signature <code>({ title, price, category, stock })</code>
+                            is parameter destructuring. The caller passes a single object (formData), and the function
+                            unpacks the four fields it needs directly. It's cleaner than passing four separate arguments
+                            or writing <code>formData.title</code> inside the function.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 7 ====== -->
+        <div class="exercise-card" data-ex="7" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-7" onclick="event.stopPropagation(); markDone(7)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 07</span>
+                            <span class="card-title">Add a new product</span>
+                        </div>
+                        <div class="card-subtitle">Spread operator · generateId · modular functions</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Builds a complete product object by combining an auto-generated ID and timestamp
+                    with the form data, then adds it to the products array (without mutating it), and updates
+                    everything: storage, table, and stats.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">addProduct</span>(formData) {
+  <span class="kw">const</span> newProduct = {
+    id:        Utils.<span class="fn">generateId</span>(),        <span class="cm">// auto unique ID</span>
+    createdAt: <span class="kw">new</span> Date().<span class="fn">toISOString</span>(), <span class="cm">// timestamp</span>
+    ...formData,  <span class="cm">// spread: copies title, price, category, stock</span>
+  };
+
+  products = [...products, newProduct]; <span class="cm">// spread: new array with item appended</span>
+
+  <span class="fn">persistProducts</span>();  <span class="cm">// save to localStorage</span>
+  <span class="fn">renderProducts</span>();   <span class="cm">// update the table</span>
+  <span class="fn">updateStats</span>();      <span class="cm">// update the stats cards</span>
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('generateId')">
+                        <span class="chip-name">Utils.generateId()</span>
+                        <span class="chip-desc">Creates a unique string ID using Date.now() in base-36 + random
+                            characters. Guarantees uniqueness.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">Spread in object literal (...formData)</span>
+                    <span class="concept-tag">Spread to append to array ([...products, newProduct])</span>
+                    <span class="concept-tag">Auto-generated ID</span>
+                    <span class="concept-tag">ISO timestamp</span>
+                    <span class="concept-tag">Modular function chaining</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What does ...formData do inside the
+                                object literal?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">The spread operator copies all key-value pairs from <code>formData</code>
+                            into the new object. So if <code>formData</code> is
+                            <code>{ title: "Laptop", price: 999, category: "Electronics", stock: 5 }</code>, the new
+                            product will contain all those fields plus <code>id</code> and <code>createdAt</code>.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why use [...products, newProduct]
+                                instead of products.push()?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>push()</code> mutates the original array in-place. The spread
+                            creates a brand new array with the new item added. This immutable approach is a safer
+                            pattern — the original array reference isn't changed unexpectedly, which avoids subtle bugs.
+                            It's also the approach used in modern frameworks like React.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>How does generateId() ensure
+                                uniqueness?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>Date.now().toString(36)</code> gives a timestamp in base-36
+                            (milliseconds since 1970, very unlikely to repeat). It then appends
+                            <code>Math.random().toString(36).slice(2, 8)</code> — 6 random characters. The combination
+                            of time + randomness makes a collision virtually impossible.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 8 ====== -->
+        <div class="exercise-card" data-ex="8" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-8" onclick="event.stopPropagation(); markDone(8)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 08</span>
+                            <span class="card-title">Edit an existing product</span>
+                        </div>
+                        <div class="card-subtitle">findIndex() · spread to merge objects</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Finds the product being edited (by its ID stored in <code>editingId</code>),
+                    creates a merged copy that preserves the original <code>id</code> and <code>createdAt</code> while
+                    updating the form fields, then replaces it in the array.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">saveEdit</span>(formData) {
+  <span class="cm">// findIndex() — returns the position of the product in the array</span>
+  <span class="kw">const</span> idx = Utils.<span class="fn">customFindIndex</span>(products, (p) => p.id === editingId);
+  <span class="kw">if</span> (idx === -<span class="num">1</span>) <span class="kw">return</span>; <span class="cm">// safety guard</span>
+
+  <span class="cm">// Spread to MERGE: old values first, new form values override them</span>
+  products[idx] = { ...products[idx], ...formData };
+
+  <span class="fn">persistProducts</span>();
+  <span class="fn">renderProducts</span>();
+  <span class="fn">updateStats</span>();
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('customFindIndex')">
+                        <span class="chip-name">Utils.customFindIndex(array, callback)</span>
+                        <span class="chip-desc">Custom findIndex(). Returns the index of the first item where callback
+                            returns true. Returns -1 if not found.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">findIndex() — returns position</span>
+                    <span class="concept-tag">Spread to merge two objects</span>
+                    <span class="concept-tag">Preserving id and createdAt</span>
+                    <span class="concept-tag">Guard clause (idx === -1)</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why spread the old product first in the
+                                merge?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">The spread operator is applied left to right, and later keys override
+                            earlier ones. By writing <code>{ ...products[idx], ...formData }</code>, the old product's
+                            <code>id</code> and <code>createdAt</code> are copied first, then <code>formData</code>'s
+                            <code>title</code>, <code>price</code>, <code>category</code>, and <code>stock</code>
+                            overwrite the old versions. If we only spread <code>formData</code>, we'd lose the
+                            <code>id</code> and <code>createdAt</code> fields entirely.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What's the difference between find() and
+                                findIndex()?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>find()</code> returns the actual item (the product object).
+                            <code>findIndex()</code> returns the position number (e.g., 2 meaning the third slot). Here
+                            we need the index because we want to replace that specific slot:
+                            <code>products[idx] = ...</code>. If we used find(), we'd get the object but wouldn't know
+                            where in the array to put the updated version.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 9 ====== -->
+        <div class="exercise-card" data-ex="9" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-9" onclick="event.stopPropagation(); markDone(9)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 09</span>
+                            <span class="card-title">Delete a product (with Undo)</span>
+                        </div>
+                        <div class="card-subtitle">findIndex() · splice() · array destructuring · undo toast</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Removes a product from the array, but saves a copy of the removed item and its
+                    original index in <code>lastDeleted</code>. This enables the Undo feature. Then shows a toast
+                    notification at the bottom of the screen.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">deleteProduct</span>(id) {
+  <span class="kw">const</span> idx = Utils.<span class="fn">customFindIndex</span>(products, (p) => p.id === id);
+  <span class="kw">if</span> (idx === -<span class="num">1</span>) <span class="kw">return</span>;
+
+  <span class="cm">// splice(idx, 1) removes 1 item at idx, returns it in an array</span>
+  <span class="cm">// Array destructuring: [removed] pulls the first element out</span>
+  <span class="kw">const</span> [removed] = products.<span class="fn">splice</span>(idx, <span class="num">1</span>);
+
+  <span class="cm">// Save removed product + its index for Undo</span>
+  lastDeleted = { product: removed, index: idx };
+
+  <span class="fn">persistProducts</span>();
+  <span class="fn">renderProducts</span>();
+  <span class="fn">updateStats</span>();
+
+  <span class="kw">const</span> toast = bootstrap.Toast.<span class="fn">getOrCreateInstance</span>(els.undoToast);
+  toast.<span class="fn">show</span>();
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('customFindIndex')">
+                        <span class="chip-name">Utils.customFindIndex(array, callback)</span>
+                        <span class="chip-desc">Returns the index (position number) of the first matching item. Returns
+                            -1 if not found.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">splice(idx, 1) — removes and returns</span>
+                    <span class="concept-tag">Array destructuring [removed]</span>
+                    <span class="concept-tag">Saving index for undo</span>
+                    <span class="concept-tag">Bootstrap Toast API</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What does splice(idx, 1) do
+                                exactly?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>splice(startIndex, deleteCount)</code> modifies the array in place.
+                            <code>splice(idx, 1)</code> says: "starting at position idx, remove 1 item." It returns an
+                            array of the removed items. So if <code>idx</code> is 2, it removes the item at index 2 and
+                            returns <code>[thatItem]</code>.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why does the destructuring say [removed]
+                                instead of just removed?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>splice()</code> always returns an ARRAY of removed items, even when
+                            only one is removed. <code>const [removed] = ...</code> is array destructuring — it unpacks
+                            the first element from that returned array into the variable <code>removed</code>. Without
+                            the brackets, <code>removed</code> would be the whole array <code>[product]</code>, not the
+                            product itself.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why save the index and not just the
+                                product?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">When the user clicks Undo, we want to restore the product to its exact
+                            original position in the list. If we only saved the product, we could only push it to the
+                            end. Saving the index lets us use <code>splice(index, 0, product)</code> to insert it back
+                            precisely where it was.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 10 ====== -->
+        <div class="exercise-card" data-ex="10" data-group="core">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-10" onclick="event.stopPropagation(); markDone(10)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 10</span>
+                            <span class="card-title">Undo the last delete</span>
+                        </div>
+                        <div class="card-subtitle">Object destructuring · splice() to insert</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">If a product was recently deleted, puts it back at its original position using
+                    splice with 0 as the delete count (meaning "just insert, don't remove"). Then clears lastDeleted so
+                    it can't be undone twice.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">undoDelete</span>() {
+  <span class="kw">if</span> (!lastDeleted) <span class="kw">return</span>; <span class="cm">// nothing to undo</span>
+
+  <span class="cm">// Object destructuring — extract both fields from lastDeleted at once</span>
+  <span class="kw">const</span> { product, index } = lastDeleted;
+
+  <span class="cm">// splice(index, 0, product) = "at position index, delete 0, insert product"</span>
+  products.<span class="fn">splice</span>(index, <span class="num">0</span>, product);
+
+  lastDeleted = <span class="kw">null</span>; <span class="cm">// clear so it can't be undone again</span>
+
+  <span class="fn">persistProducts</span>();
+  <span class="fn">renderProducts</span>();
+  <span class="fn">updateStats</span>();
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('saveToStorage')">
+                        <span class="chip-name">Utils.saveToStorage (via persistProducts)</span>
+                        <span class="chip-desc">Called indirectly through persistProducts() to sync the restored array
+                            to localStorage.</span>
+                    </div>
+                </div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">Object destructuring</span>
+                    <span class="concept-tag">splice(index, 0, item) — insert without removing</span>
+                    <span class="concept-tag">Guard clause (!lastDeleted)</span>
+                    <span class="concept-tag">State reset (lastDeleted = null)</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Explain splice(index, 0, product) step
+                                by step.</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">The three arguments are: (1) where to start — the original index, (2) how
+                            many items to delete — 0, meaning don't remove anything, just insert, (3) what to insert —
+                            the product object. So it slots the product back in exactly where it was without disturbing
+                            anything else.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why set lastDeleted = null after
+                                undoing?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">If we didn't clear it, the user could click Undo again and add duplicate
+                            copies of the product. Setting it to null means the guard at the top
+                            (<code>if (!lastDeleted) return</code>) will stop any further undo attempts until the next
+                            delete.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 11 ====== -->
+        <div class="exercise-card" data-ex="11" data-group="bonus">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-11" onclick="event.stopPropagation(); markDone(11)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 11</span>
+                            <span class="card-title">Export products.json</span>
+                            <span
+                                style="background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:var(--yellow);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;">BONUS</span>
+                        </div>
+                        <div class="card-subtitle">JSON.stringify · Blob · Object URL · programmatic download</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Converts the products array to a formatted JSON string, wraps it in a Blob
+                    (in-memory file), creates a temporary browser URL for it, then triggers a download by
+                    programmatically clicking a hidden anchor tag.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">exportProducts</span>() {
+  <span class="cm">// JSON.stringify(value, replacer, indent) — pretty-printed with 2 spaces</span>
+  <span class="kw">const</span> json = JSON.<span class="fn">stringify</span>(products, <span class="kw">null</span>, <span class="num">2</span>);
+
+  <span class="cm">// Blob — creates an in-memory file-like object</span>
+  <span class="kw">const</span> blob = <span class="kw">new</span> <span class="fn">Blob</span>([json], { type: <span class="str">'application/json'</span> });
+
+  <span class="cm">// Object URL — temporary URL pointing to the blob</span>
+  <span class="kw">const</span> url = URL.<span class="fn">createObjectURL</span>(blob);
+
+  <span class="cm">// Programmatic download via hidden anchor tag</span>
+  <span class="kw">const</span> a = document.<span class="fn">createElement</span>(<span class="str">'a'</span>);
+  a.href = url;
+  a.download = <span class="str">'products.json'</span>;
+  a.<span class="fn">click</span>();
+
+  URL.<span class="fn">revokeObjectURL</span>(url); <span class="cm">// clean up memory</span>
+}</pre>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">JSON.stringify with indentation</span>
+                    <span class="concept-tag">Blob API</span>
+                    <span class="concept-tag">URL.createObjectURL</span>
+                    <span class="concept-tag">Programmatic anchor click</span>
+                    <span class="concept-tag">Memory cleanup (revokeObjectURL)</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>What is a Blob?</span><span
+                                class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">A Blob (Binary Large Object) is a file-like object that lives in memory
+                            in the browser. It's not a real file on the disk yet, but it can hold data (text, binary)
+                            and be given a MIME type. Here we create one holding our JSON string with the type
+                            "application/json".</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why call revokeObjectURL after
+                                clicking?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer"><code>createObjectURL</code> allocates memory for the URL. If we never
+                            revoke it, that memory leaks — it stays allocated for the whole session. Calling
+                            <code>revokeObjectURL</code> immediately after the click is fine because the download is
+                            already queued in the browser's download manager.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====== EX 12 ====== -->
+        <div class="exercise-card" data-ex="12" data-group="bonus">
+            <div class="card-header" onclick="toggleCard(this)">
+                <div class="card-header-left">
+                    <div class="done-indicator" id="done-12" onclick="event.stopPropagation(); markDone(12)"></div>
+                    <div>
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                            <span class="ex-num">EX 12</span>
+                            <span class="card-title">Dark mode toggle</span>
+                            <span
+                                style="background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.3);color:var(--yellow);font-size:10px;padding:2px 8px;border-radius:4px;font-weight:600;">BONUS</span>
+                        </div>
+                        <div class="card-subtitle">Ternary operator · data-bs-theme · saveToStorage</div>
+                    </div>
+                </div>
+                <div class="chevron">▾</div>
+            </div>
+            <div class="card-body">
+                <div class="section-label">What it does</div>
+                <div class="what-box">Flips Bootstrap's built-in dark mode by toggling the <code>data-bs-theme</code>
+                    attribute on the HTML element between "light" and "dark". Saves the choice to localStorage so it
+                    persists on next visit. Also swaps the moon/sun icons on the button.</div>
+
+                <div class="section-label">The Code</div>
+                <pre><span class="kw">function</span> <span class="fn">toggleTheme</span>() {
+  <span class="kw">const</span> current = document.documentElement.<span class="fn">getAttribute</span>(<span class="str">'data-bs-theme'</span>);
+
+  <span class="cm">// Ternary operator — one-line if/else to flip the value</span>
+  <span class="kw">const</span> next = current === <span class="str">'dark'</span> ? <span class="str">'light'</span> : <span class="str">'dark'</span>;
+
+  document.documentElement.<span class="fn">setAttribute</span>(<span class="str">'data-bs-theme'</span>, next);
+  Utils.<span class="fn">saveToStorage</span>(THEME_KEY, next); <span class="cm">// persist the choice</span>
+
+  <span class="cm">// Toggle icon visibility based on current theme</span>
+  els.themeToggle
+    .<span class="fn">querySelector</span>(<span class="str">'.theme-icon-light'</span>)
+    .classList.<span class="fn">toggle</span>(<span class="str">'d-none'</span>, next === <span class="str">'dark'</span>);
+  els.themeToggle
+    .<span class="fn">querySelector</span>(<span class="str">'.theme-icon-dark'</span>)
+    .classList.<span class="fn">toggle</span>(<span class="str">'d-none'</span>, next !== <span class="str">'dark'</span>);
+}</pre>
+
+                <div class="section-label">Utils Functions Used</div>
+                <div class="utils-grid">
+                    <div class="util-chip" onclick="showUtil('saveToStorage')">
+                        <span class="chip-name">Utils.saveToStorage(key, value)</span>
+                        <span class="chip-desc">Saves the theme string ("light" or "dark") to localStorage so it's
+                            remembered on next visit.</span>
+                    </div>
+                </div>
+
+                <div class="tip-box"><strong>💡 The flash-prevention script in &lt;head&gt;:</strong> Before the page
+                    fully renders, a small inline script runs and reads the saved theme from localStorage. It applies
+                    <code>data-bs-theme</code> before the CSS paints, preventing a visible flash of the wrong color mode
+                    on load.</div>
+
+                <div class="section-label">Key Concepts</div>
+                <div class="concept-list">
+                    <span class="concept-tag">Ternary operator</span>
+                    <span class="concept-tag">data-bs-theme (Bootstrap 5 theming)</span>
+                    <span class="concept-tag">classList.toggle with boolean</span>
+                    <span class="concept-tag">Flash prevention in &lt;head&gt;</span>
+                </div>
+
+                <div class="section-label">Likely Instructor Questions</div>
+                <div class="qa-list">
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>How does Bootstrap know to switch colors
+                                without writing CSS?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">Bootstrap 5 has CSS custom properties (variables) defined for both light
+                            and dark themes. When <code>data-bs-theme="dark"</code> is set on the root
+                            <code>&lt;html&gt;</code> element, Bootstrap's stylesheet activates its dark-mode variable
+                            values for all components automatically.</div>
+                    </div>
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleQA(this)"><span>Why is the theme script in &lt;head&gt;
+                                and not in script.js?</span><span class="qa-toggle">▾</span></div>
+                        <div class="qa-answer">Scripts at the bottom of &lt;body&gt; run after the page has already been
+                            painted. If theme-switching happened there, the user would see a flash of the default light
+                            theme first. The &lt;head&gt; script runs before any rendering, so the correct theme is
+                            applied immediately on page load.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <!-- ── UTILS REFERENCE TABLE ── -->
+        <div style="margin-top:0">
+            <div style="font-size:18px;font-weight:700;margin-bottom:4px;">Utils Quick Reference</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Every Utils function used across all
+                exercises — click any row for the full code.</div>
+            <table class="summary-table">
+                <thead>
+                    <tr>
+                        <th>Function</th>
+                        <th>Category</th>
+                        <th>Used In</th>
+                        <th>What It Does</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="showUtil('loadFromStorage')" style="cursor:pointer">
+                        <td class="td-fn">loadFromStorage(key, fallback)</td>
+                        <td>Storage</td>
+                        <td class="td-ex">Ex 1</td>
+                        <td>Reads + parses from localStorage; returns fallback if missing</td>
+                    </tr>
+                    <tr onclick="showUtil('saveToStorage')" style="cursor:pointer">
+                        <td class="td-fn">saveToStorage(key, value)</td>
+                        <td>Storage</td>
+                        <td class="td-ex">Ex 2, 12</td>
+                        <td>Stringifies + saves to localStorage</td>
+                    </tr>
+                    <tr onclick="showUtil('normalizeText')" style="cursor:pointer">
+                        <td class="td-fn">normalizeText(str)</td>
+                        <td>String</td>
+                        <td class="td-ex">Ex 3</td>
+                        <td>Trim + lowercase for case-insensitive comparison</td>
+                    </tr>
+                    <tr onclick="showUtil('customFilter')" style="cursor:pointer">
+                        <td class="td-fn">customFilter(array, cb)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 3</td>
+                        <td>Custom filter() — keeps items where cb returns true</td>
+                    </tr>
+                    <tr onclick="showUtil('sortBy')" style="cursor:pointer">
+                        <td class="td-fn">sortBy(array, key, dir)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 3</td>
+                        <td>Returns new array sorted by a key asc/desc</td>
+                    </tr>
+                    <tr onclick="showUtil('customEach')" style="cursor:pointer">
+                        <td class="td-fn">customEach(array, cb)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 4</td>
+                        <td>Custom forEach() — runs cb for each item</td>
+                    </tr>
+                    <tr onclick="showUtil('formatCurrency')" style="cursor:pointer">
+                        <td class="td-fn">formatCurrency(value)</td>
+                        <td>Number</td>
+                        <td class="td-ex">Ex 4, 5</td>
+                        <td>Formats number as "$12.99" using Intl.NumberFormat</td>
+                    </tr>
+                    <tr onclick="showUtil('formatDate')" style="cursor:pointer">
+                        <td class="td-fn">formatDate(input)</td>
+                        <td>Date</td>
+                        <td class="td-ex">Ex 4</td>
+                        <td>Converts ISO string to "DD/MM/YYYY"</td>
+                    </tr>
+                    <tr onclick="showUtil('customReduce')" style="cursor:pointer">
+                        <td class="td-fn">customReduce(array, cb, init)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 5</td>
+                        <td>Custom reduce() — accumulates one value from array</td>
+                    </tr>
+                    <tr onclick="showUtil('customFind')" style="cursor:pointer">
+                        <td class="td-fn">customFind(array, cb)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 5</td>
+                        <td>Custom find() — returns first matching item or undefined</td>
+                    </tr>
+                    <tr onclick="showUtil('isRequired')" style="cursor:pointer">
+                        <td class="td-fn">isRequired(value)</td>
+                        <td>Validation</td>
+                        <td class="td-ex">Ex 6</td>
+                        <td>Returns true if value is non-empty and non-null</td>
+                    </tr>
+                    <tr onclick="showUtil('isPositiveNumber')" style="cursor:pointer">
+                        <td class="td-fn">isPositiveNumber(value)</td>
+                        <td>Validation</td>
+                        <td class="td-ex">Ex 6</td>
+                        <td>Returns true if value is a number > 0</td>
+                    </tr>
+                    <tr onclick="showUtil('isNonNegativeInteger')" style="cursor:pointer">
+                        <td class="td-fn">isNonNegativeInteger(value)</td>
+                        <td>Validation</td>
+                        <td class="td-ex">Ex 6</td>
+                        <td>Returns true if value is integer ≥ 0</td>
+                    </tr>
+                    <tr onclick="showUtil('customSome')" style="cursor:pointer">
+                        <td class="td-fn">customSome(array, cb)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 6</td>
+                        <td>Custom some() — true if at least one item passes cb</td>
+                    </tr>
+                    <tr onclick="showUtil('customEvery')" style="cursor:pointer">
+                        <td class="td-fn">customEvery(array, cb)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 6, submit</td>
+                        <td>Custom every() — true only if ALL items pass cb</td>
+                    </tr>
+                    <tr onclick="showUtil('generateId')" style="cursor:pointer">
+                        <td class="td-fn">generateId()</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 7</td>
+                        <td>Creates unique string ID via timestamp + random</td>
+                    </tr>
+                    <tr onclick="showUtil('customFindIndex')" style="cursor:pointer">
+                        <td class="td-fn">customFindIndex(array, cb)</td>
+                        <td>Array</td>
+                        <td class="td-ex">Ex 8, 9</td>
+                        <td>Custom findIndex() — returns position or -1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div><!-- /container -->
+
+    <!-- ── UTIL MODAL DATA ── -->
+    <script>
+        const UTIL_DATA = {
+            loadFromStorage: {
+                name: 'Utils.loadFromStorage(key, fallback = null)',
+                purpose: 'Reads a value from localStorage under the given key. Calls JSON.parse to convert the stored string back to a JavaScript value. If the key doesn\'t exist (null) or parsing fails, returns the fallback value instead. The fallback defaults to null, but Exercise 1 passes [] so the app starts with an empty array.',
+                code: `function loadFromStorage(key, fallback = null) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw === null) return fallback;
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error('loadFromStorage failed:', err);
+    return fallback;
+  }
+}`
+            },
+            saveToStorage: {
+                name: 'Utils.saveToStorage(key, value)',
+                purpose: 'Converts the value to a JSON string with JSON.stringify, then stores it in localStorage under the given key. Wrapped in try/catch because localStorage can fail in private browsing or when storage quota is exceeded. Returns true on success, false on failure.',
+                code: `function saveToStorage(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch (err) {
+    console.error('saveToStorage failed:', err);
+    return false;
+  }
+}`
+            },
+            normalizeText: {
+                name: 'Utils.normalizeText(str = "")',
+                purpose: 'Trims whitespace from both ends of the string and converts it to lowercase. Used in Exercise 3 to make the search case-insensitive — both the search input and each product title are normalized before comparison, so "LAPTOP" and "laptop" both match "lap".',
+                code: `function normalizeText(str = '') {
+  if (typeof str !== 'string') return '';
+  return str.trim().toLowerCase();
+}`
+            },
+            customFilter: {
+                name: 'Utils.customFilter(array, callback)',
+                purpose: 'A hand-written implementation of the native Array.filter() method. Iterates through every element and runs the callback. If the callback returns true for an element, that element is pushed into a new array. The original array is never modified. Returns the new filtered array.',
+                code: `function customFilter(array = [], callback) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  const array2 = [];
+  let i = 0;
+  while (i < array.length) {
+    const element = array[i];
+    if (callback(element, i, array)) {
+      array2.push(element);
+    }
+    i++;
+  }
+  return array2;
+}`
+            },
+            sortBy: {
+                name: 'Utils.sortBy(array = [], key, direction = "asc")',
+                purpose: 'Returns a NEW sorted array (the original is not touched). It spreads the array first [...array] to clone it, then sorts the clone by a given key. The direction can be "asc" (smallest first) or "desc" (largest first). Works for numbers and strings (including ISO date strings, since they sort lexicographically).',
+                code: `function sortBy(array = [], key, direction = 'asc') {
+  const dir = direction === 'desc' ? -1 : 1;
+  return [...array].sort((a, b) => {
+    const av = a[key];
+    const bv = b[key];
+    if (av < bv) return -1 * dir;
+    if (av > bv) return  1 * dir;
+    return 0;
+  });
+}`
+            },
+            customEach: {
+                name: 'Utils.customEach(array, callback)',
+                purpose: 'A hand-written implementation of Array.forEach(). Runs the callback function for every element in the array, passing (element, index, array). Does NOT return anything (returns undefined). Used in Exercise 4 to iterate over visible products and build table rows.',
+                code: `function customEach(array = [], callback) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  let i = 0;
+  while (i < array.length) {
+    callback(array[i], i, array);
+    i++;
+  }
+}`
+            },
+            formatCurrency: {
+                name: 'Utils.formatCurrency(value, currency = "USD", locale = "en-US")',
+                purpose: 'Takes a number and formats it as a currency string using the browser\'s built-in Intl.NumberFormat API. Defaults to US dollars. Returns "—" if the value is not a valid number (NaN). Example: formatCurrency(1234.5) → "$1,234.50".',
+                code: `function formatCurrency(value, currency = 'USD', locale = 'en-US') {
+  const n = Number(value);
+  if (Number.isNaN(n)) return '—';
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency,
+  }).format(n);
+}`
+            },
+            formatDate: {
+                name: 'Utils.formatDate(input)',
+                purpose: 'Accepts either a Date object or an ISO date string (like "2024-01-15T10:30:00.000Z") and returns it formatted as "DD/MM/YYYY". Uses padStart(2, "0") to always give two digits for day and month. Returns "—" if the input is not a valid date.',
+                code: `function formatDate(input) {
+  const d = input instanceof Date ? input : new Date(input);
+  if (Number.isNaN(d.getTime())) return '—';
+  const day   = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const year  = d.getFullYear();
+  return \`\${day}/\${month}/\${year}\`;
+}`
+            },
+            customReduce: {
+                name: 'Utils.customReduce(array, callback, initialValue)',
+                purpose: 'A hand-written implementation of Array.reduce(). Starts with the initialValue and runs the callback for every item, accumulating a result. The callback receives (accumulator, currentItem, index, array). Used in Exercise 5 twice: once to sum price×stock, and once to find the maximum price.',
+                code: `function customReduce(array = [], callback, initialValue) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  let accumulator;
+  let i;
+  if (initialValue !== undefined) {
+    accumulator = initialValue;
+    i = 0;
+  } else {
+    accumulator = array[0]; // use first element if no initial value
+    i = 1;
+  }
+  while (i < array.length) {
+    accumulator = callback(accumulator, array[i], i, array);
+    i++;
+  }
+  return accumulator;
+}`
+            },
+            customFind: {
+                name: 'Utils.customFind(array, callback)',
+                purpose: 'A hand-written implementation of Array.find(). Iterates the array and returns the FIRST element for which the callback returns true. Stops immediately when a match is found (short-circuits). Returns undefined if no match is found. Used in Exercise 5 to get the product object with the maximum price.',
+                code: `function customFind(array = [], callback) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  let foundElement;
+  let i = 0;
+  while (i < array.length) {
+    const element = array[i];
+    if (callback(element, i, array)) {
+      foundElement = element;
+      break; // stop as soon as we find it
+    }
+    i++;
+  }
+  return foundElement;
+}`
+            },
+            isRequired: {
+                name: 'Utils.isRequired(value)',
+                purpose: 'Validation utility. Returns false if the value is null or undefined. For strings, also returns false if the string is empty or only whitespace (uses trim()). Returns true for any other truthy value. Used to validate the Title field in Exercise 6.',
+                code: `function isRequired(value) {
+  if (value === null || value === undefined) return false;
+  if (typeof value === 'string') return value.trim().length > 0;
+  return true;
+}`
+            },
+            isPositiveNumber: {
+                name: 'Utils.isPositiveNumber(value)',
+                purpose: 'Validation utility. Converts the value to a number with Number(), then checks that it is not NaN and is strictly greater than 0. Rejects zero, negatives, and non-numeric strings. Used to validate the Price field in Exercise 6.',
+                code: `function isPositiveNumber(value) {
+  const n = Number(value);
+  return !Number.isNaN(n) && n > 0;
+}`
+            },
+            isNonNegativeInteger: {
+                name: 'Utils.isNonNegativeInteger(value)',
+                purpose: 'Validation utility. Converts to number, then checks it is an integer (no decimal part) AND is greater than or equal to 0. Rejects decimals like 1.5 and negatives like -3. Used to validate the Stock field in Exercise 6.',
+                code: `function isNonNegativeInteger(value) {
+  const n = Number(value);
+  return Number.isInteger(n) && n >= 0;
+}`
+            },
+            customSome: {
+                name: 'Utils.customSome(array, callback)',
+                purpose: 'A hand-written implementation of Array.some(). Returns true as soon as one element passes the callback test — short-circuits immediately. Returns false if NO elements pass. Used in Exercise 6 to check if the chosen category is in the valid CATEGORIES list.',
+                code: `function customSome(array = [], callback) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  let i = 0;
+  while (i < array.length) {
+    if (callback(array[i], i, array)) return true; // short-circuit
+    i++;
+  }
+  return false;
+}`
+            },
+            customEvery: {
+                name: 'Utils.customEvery(array, callback)',
+                purpose: 'A hand-written implementation of Array.every(). Returns false as soon as one element FAILS the test — short-circuits immediately. Returns true only if ALL elements pass. Used in the form submit handler: Object.keys(errors) is the array, and it checks that no key has an error message.',
+                code: `function customEvery(array = [], callback) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  let i = 0;
+  while (i < array.length) {
+    if (!callback(array[i], i, array)) return false; // short-circuit
+    i++;
+  }
+  return true;
+}`
+            },
+            generateId: {
+                name: 'Utils.generateId()',
+                purpose: 'Creates a unique string identifier. Combines Date.now().toString(36) — the current millisecond timestamp converted to base-36 (shorter) — with a slice of Math.random().toString(36). The timestamp guarantees IDs generated at different times are different; the random suffix handles the (extremely unlikely) case of two IDs generated in the same millisecond.',
+                code: `function generateId() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+}
+// Example output: "lp3k9fxmbc42q"`
+            },
+            customFindIndex: {
+                name: 'Utils.customFindIndex(array, callback)',
+                purpose: 'A hand-written implementation of Array.findIndex(). Like customFind but returns the INDEX (number) of the matching element, not the element itself. Returns -1 if no match is found. Used in Exercise 8 to find a product\'s position for replacement, and in Exercise 9 to find a product\'s position for removal.',
+                code: `function customFindIndex(array = [], callback) {
+  if (!Array.isArray(array))
+    throw new TypeError('First argument must be an array');
+  if (typeof callback !== 'function')
+    throw new TypeError('Second argument must be a function');
+
+  let i = 0;
+  while (i < array.length) {
+    if (callback(array[i], i, array)) return i; // return the index
+    i++;
+  }
+  return -1; // not found
+}`
+            },
+        };
+
+        // ── MODAL ──
+        function showUtil(key) {
+            const d = UTIL_DATA[key];
+            if (!d) return;
+            document.getElementById('modalFnName').textContent = d.name;
+            document.getElementById('modalPurpose').textContent = d.purpose;
+            document.getElementById('modalCode').textContent = d.code;
+            document.getElementById('utilModal').classList.add('open');
+        }
+        function closeModal() {
+            document.getElementById('utilModal').classList.remove('open');
+        }
+        document.getElementById('utilModal').addEventListener('click', function (e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ── CARD TOGGLE ──
+        function toggleCard(header) {
+            const card = header.closest('.exercise-card');
+            card.classList.toggle('open');
+        }
+
+        // ── QA TOGGLE ──
+        function toggleQA(questionEl) {
+            const item = questionEl.closest('.qa-item');
+            item.classList.toggle('open');
+        }
+
+        // ── DONE TRACKING ──
+        const doneSet = new Set(JSON.parse(localStorage.getItem('sg_done') || '[]'));
+        doneSet.forEach(n => {
+            const el = document.getElementById('done-' + n);
+            if (el) el.classList.add('done');
+            const el2 = el?.closest('.exercise-card');
+            if (el2) el2.style.borderColor = 'rgba(52,211,153,.35)';
+        });
+        updateProgress();
+
+        function markDone(n) {
+            const el = document.getElementById('done-' + n);
+            if (!el) return;
+            if (doneSet.has(n)) {
+                doneSet.delete(n);
+                el.classList.remove('done');
+                el.closest('.exercise-card').style.borderColor = '';
+                el.textContent = '';
+            } else {
+                doneSet.add(n);
+                el.classList.add('done');
+                el.textContent = '✓';
+                el.closest('.exercise-card').style.borderColor = 'rgba(52,211,153,.35)';
+            }
+            localStorage.setItem('sg_done', JSON.stringify([...doneSet]));
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const pct = Math.round((doneSet.size / 12) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent =
+                doneSet.size + ' / 12 exercises reviewed';
+        }
+
+        // ── FILTER ──
+        function filterCards(group, pill) {
+            document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                const show = group === 'all' || card.dataset.group === group;
+                card.style.display = show ? '' : 'none';
+            });
+        }
+    </script>
+</body>
+
+</html>
