@@ -1,0 +1,45 @@
+body {
+  font-family: system-ui, sans-serif;
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+section {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.student-list {
+  list-style: none;
+  padding: 0;
+}
+
+.student-list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #eee;
+}
+
+.student-list .grade {
+  font-weight: bold;
+}
+
+button {
+  cursor: pointer;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.4rem 0.6rem;
+  border-bottom: 1px solid #eee;
+}
